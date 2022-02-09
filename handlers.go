@@ -37,7 +37,15 @@ func (gh *GithubWebhookHandler) ServeHTTP(rw http.ResponseWriter, req *http.Requ
 	log.Printf("Received webhhook for %s", pushEvent.Repository.CloneURL)
 
 	ScanResourceCache(func(pipeline Pipeline, resource atc.ResourceConfig) bool {
-		if resource.Type != "git" && resource.Type != "pull-request" && resource.Type != "git-proxy" {
+		// In Spire we unfortunately have two names for the same resource
+		// type. This highlights a general issue with the broadcaster that
+		// ideally users should be able to easily override the resource type
+		// names that are included in this conditional.
+		if resource.Type != "git" &&
+			resource.Type != "pull-request" &&
+			resource.Type != "git-proxy" &&
+			resource.Type != "github-release" &&
+			resource.Type != "gh-release" {
 			return true
 		}
 		if uri, ok := ConstructGitHubUriFromConfig(resource); ok {

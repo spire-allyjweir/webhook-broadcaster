@@ -31,6 +31,12 @@ func ConstructGitHubUriFromConfig(resource atc.ResourceConfig) (string, bool) {
 	}
 
 	// Config in `repository` key only for:
+	// - concourse/github-release-resource
+	if contains(keys, "owner") && contains(keys, "repository") {
+		return fmt.Sprintf("https://github.com/%s/%s", resource.Source["owner"].(string), resource.Source["repository"].(string)), true
+	}
+
+	// Config in `repository` key only for:
 	// - telia-oss/github-pr-resource
 	if contains(keys, "repository") {
 		return fmt.Sprintf("https://github.com/%s", resource.Source["repository"].(string)), true

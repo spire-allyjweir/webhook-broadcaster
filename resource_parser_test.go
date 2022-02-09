@@ -11,8 +11,9 @@ func TestGitHubUriConstruction(t *testing.T) {
 		ResourceConfig atc.ResourceConfig
 		Result         string
 	}{
-		{atc.ResourceConfig{Source: atc.Source{"uri": "https://github.com/some/repo"}}, "https://github.com/some/repo"},
-		{atc.ResourceConfig{Source: atc.Source{"repository": "some/repo"}}, "https://github.com/some/repo"},
+		{atc.ResourceConfig{Source: atc.Source{"uri": "https://github.com/some/repo"}}, "https://github.com/some/repo"}, // Test for concourse/git-resource
+		{atc.ResourceConfig{Source: atc.Source{"repository": "some/repo"}}, "https://github.com/some/repo"},             // Test for telia-oss/github-pr-resource
+		{atc.ResourceConfig{Source: atc.Source{"owner": "some", "repository": "repo"}}, "https://github.com/some/repo"}, // Test for concourse/github-release-resource
 	}
 
 	for nr, c := range cases {
